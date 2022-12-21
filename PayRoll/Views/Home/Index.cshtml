@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (Request.IsAuthenticated)
+{
+    <h1>Welcome</h1>
+    <ul>
+        <li>@Html.ActionLink("List all companies", "ListAllCompanies")</li>
+        <li>@Html.ActionLink("List All Employees", "ListAllEmployees")</li>
+        <li>@Html.ActionLink("List South African Employees", "ListSouthAfricanEmployees")</li>
+    </ul>
+}
+else
+{
+    <h1>Please Login to begin</h1>
+}
