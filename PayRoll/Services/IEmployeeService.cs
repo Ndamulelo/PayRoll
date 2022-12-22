@@ -10,6 +10,6 @@ namespace PayRoll.Services
     public interface IEmployeeService
     {
         IQueryable<Employee> GetAll();
-        IQueryable<Employee> GetByCountry();
+        IQueryable<Employee> GetByCountry(string countryName);
     }
 }

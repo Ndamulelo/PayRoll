@@ -20,9 +20,9 @@ namespace PayRoll.Services
            return _applicationDbContext.Employees.Include(a => a.HomeAddress).OrderBy(o => o.ID);
         }
 
-        public IQueryable<Employee> GetByCountry()
+        public IQueryable<Employee> GetByCountry(string countryName)
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.Employees.Include(a => a.HomeAddress).OrderBy(o => o.ID).Where(c => c.HomeAddress.Country.Contains(countryName));
         }
     }
 }

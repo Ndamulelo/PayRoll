@@ -73,25 +73,15 @@ namespace PayRoll.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListSouthAfricanEmployees()
+        public ActionResult ListSouthAfricanEmployees(int? page)
         {
             if (User.Identity.IsAuthenticated)
             {
-                List<Employee> l = new List<Employee>();
+                int pageSize = 2;
+                int pageNumber = page ?? 1;
+                string countryName = "South Africa";
 
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                for(int i = 0; i < db.Employees.ToList().Count; i++)
-                {
-                    var e = db.Employees.ToList()[i];
-
-                    if (e.HomeAddress?.Country == "South Africa")
-                    {
-                        l.Add(e);
-                    }
-                }
-
-                return View(l);
+                return View(_employeeService.GetByCountry(countryName).ToPagedList(pageNumber, pageSize));
             }
             throw new Exception("User not authenticated");
         }
