@@ -9,7 +9,6 @@ namespace PayRoll.Services
 {
     public interface ICompanyService
     {
-        string CompanyName();
         IQueryable<Company> GetAll();
         Company GetById(int id);
     }

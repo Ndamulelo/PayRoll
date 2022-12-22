@@ -15,11 +15,6 @@ namespace PayRoll.Services
         {
             _applicationDbContext = new ApplicationDbContext();
         }
-        public string CompanyName()
-        {
-            return "Muthaphuli Holdings";
-        }
-
         public IQueryable<Company> GetAll()
         {
             return _applicationDbContext.Companies;

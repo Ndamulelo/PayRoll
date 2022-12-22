@@ -284,6 +284,7 @@
     <Compile Include="Services\ICompanyService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -364,6 +365,9 @@
     <EmbeddedResource Include="Migrations\202106091007082_addedInitialModels.resx">
       <DependentUpon>202106091007082_addedInitialModels.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
