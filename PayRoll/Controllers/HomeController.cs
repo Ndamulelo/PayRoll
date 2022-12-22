@@ -37,36 +37,24 @@ namespace PayRoll.Controllers
             throw new Exception("User not authenticated");
         }
 
-        public ActionResult CompanyDetails()
+        public ActionResult CompanyDetails(int id)
         {
             if (User.Identity.IsAuthenticated)
             {
-                int? id = int.Parse( Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf('/')+1));
-
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                if (id == null)
+                if (id < 1)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                Company c = null;
+                var company = _companyService.GetById(id);
 
-                for(int i = 0; i < db.Companies.ToList().Count; i++)
-                {
-                    var x = db.Companies.ToList()[i];
 
-                    if(x.ID == id)
-                    {
-                        c = x;
-                    }
-                }
-
-                if (c == null)
+                if (company == null)
                 {
                     return HttpNotFound();
                 }
-                return View(c);
+
+                return View(company);
             }
             throw new Exception("User not authenticated");
         }

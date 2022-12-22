@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using PayRoll.Models;
+using System.Data.Entity;
 
 namespace PayRoll.Services
 {
@@ -22,12 +23,11 @@ namespace PayRoll.Services
         public IQueryable<Company> GetAll()
         {
             return _applicationDbContext.Companies;
-            // throw new NotImplementedException();
         }
 
         public Company GetById(int id)
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.Companies.Where(x => x.ID == id).Include(b => b.BusinessAddress).FirstOrDefault();
         }
     }
 }
