@@ -60,13 +60,14 @@ namespace PayRoll.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListAllEmployees()
+        public ActionResult ListAllEmployees(int? page)
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationDbContext db = new ApplicationDbContext();
+                int pageSize = 2;
+                int pageNumber = page ?? 1;
 
-                return View(db.Employees.ToList());
+                return View(_employeeService.GetAll().ToPagedList(pageNumber, pageSize));
             }
             throw new Exception("User not authenticated");
         }

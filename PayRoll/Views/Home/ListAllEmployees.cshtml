@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PayRoll.Models.Employee>
+﻿@model PagedList.IPagedList <PayRoll.Models.Employee>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "ListSouthAfricanEmployees";
@@ -9,16 +10,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Lastname)
+           Lastname
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Position)
+           Position
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.HomeAddress.Country)
+           Country
         </th>
     </tr>
 
@@ -41,4 +42,12 @@
     }
 
 </table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ListAllEmployees",
+    new { page }))
+<br />
+
 @Html.ActionLink("Back to List", "Index")

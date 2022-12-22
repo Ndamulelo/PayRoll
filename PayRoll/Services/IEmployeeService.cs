@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PayRoll.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace PayRoll.Services
 {
     public interface IEmployeeService
     {
+        IQueryable<Employee> GetAll();
+        IQueryable<Employee> GetByCountry();
     }
 }
