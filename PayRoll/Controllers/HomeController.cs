@@ -1,100 +1,63 @@
 ﻿using PayRoll.Models;
+using PayRoll.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PayRoll.Utils;
 
 namespace PayRoll.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        private ICompanyService _companyService;
+        private IEmployeeService _employeeService;
+     
+        public HomeController()
+        {
+            _companyService = new CompanyService();
+            _employeeService = new EmployeeService();
+        }
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public ActionResult ListAllCompanies()
+        public ActionResult ListAllCompanies(int? page)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                return View(db.Companies.ToList());
-            }
-            throw new Exception("User not authenticated");
+            return View(_companyService.GetAll().OrderBy(x => x.ID).ToPagedList(page ?? 1, Util.PageSize));
         }
 
-        public ActionResult CompanyDetails()
+        public ActionResult CompanyDetails(int id)
         {
-            if (User.Identity.IsAuthenticated)
+            var company = _companyService.GetById(id);
+
+
+            if (company == null)
             {
-                int? id = int.Parse( Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf('/')+1));
-
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-
-                Company c = null;
-
-                for(int i = 0; i < db.Companies.ToList().Count; i++)
-                {
-                    var x = db.Companies.ToList()[i];
-
-                    if(x.ID == id)
-                    {
-                        c = x;
-                    }
-                }
-
-                if (c == null)
-                {
-                    return HttpNotFound();
-                }
-                return View(c);
+                return HttpNotFound();
             }
-            throw new Exception("User not authenticated");
+
+            return View(company);
         }
 
         [HttpGet]
-        public ActionResult ListAllEmployees()
+        public ActionResult ListAllEmployees(int? page)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                return View(db.Employees.ToList());
-            }
-            throw new Exception("User not authenticated");
+            return View(_employeeService.GetAll().ToPagedList(page ?? 1, Util.PageSize));
         }
 
         [HttpGet]
-        public ActionResult ListSouthAfricanEmployees()
+        public ActionResult ListSouthAfricanEmployees(int? page)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                List<Employee> l = new List<Employee>();
+            string countryName = "South Africa";
 
-                ApplicationDbContext db = new ApplicationDbContext();
-
-                for(int i = 0; i < db.Employees.ToList().Count; i++)
-                {
-                    var e = db.Employees.ToList()[i];
-
-                    if (e.HomeAddress?.Country == "South Africa")
-                    {
-                        l.Add(e);
-                    }
-                }
-
-                return View(l);
-            }
-            throw new Exception("User not authenticated");
+            return View(_employeeService.GetByCountry(countryName).ToPagedList(page ?? 1, Util.PageSize));
         }
 
     }
