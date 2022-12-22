@@ -1,28 +1,38 @@
 ﻿using PayRoll.Models;
+using PayRoll.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace PayRoll.Controllers
 {
     public class HomeController : Controller
     {
+        private ICompanyService _companyService;
+        private IEmployeeService _employeeService;
+        public HomeController(/*ICompanyService companyService, IEmployeeService employeeService*/)
+        {
+            _companyService = new CompanyService();
+            _employeeService = new EmployeeService();
+        }
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public ActionResult ListAllCompanies()
+        public ActionResult ListAllCompanies(int? page)
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationDbContext db = new ApplicationDbContext();
+                int pageSize = 2;
+                int pageNumber = page ?? 1;
 
-                return View(db.Companies.ToList());
+                return View(_companyService.GetAll().OrderBy(x => x.ID).ToPagedList(pageNumber, pageSize));
             }
             throw new Exception("User not authenticated");
         }

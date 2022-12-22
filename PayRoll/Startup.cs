@@ -15,6 +15,9 @@ namespace PayRoll
             SeedWithTestData();
         }
 
+        public void ConfigureServices()
+        {
+        }
         private void SeedWithTestData()
         {
             ApplicationDbContext db = new ApplicationDbContext();
